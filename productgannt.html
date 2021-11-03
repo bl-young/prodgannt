@@ -61,7 +61,7 @@
           let x = value;
 
           // first two values must be strings
-          if (i === 0 || i === 1) {
+          if (i === 0 || i === 1 || i === 6) {
             x = String(value)
           }
 
@@ -78,11 +78,6 @@
           // sixth values in their examples are numbers
           if (i === 5) {
             x = Number(value)
-          }
-
-          // seventh values in their examples are null
-          if (i === 6) {
-            x = null
           }
           return x;
         })
