@@ -5,14 +5,14 @@
   <title>Gantt</title>
 
 <body>
-  <div id="gantt"></div>
-
   <p>Select local CSV File:</p>
   <input id="csv" type="file">
 
   <output id="out">
     Contents of CSV will appear here for debugging.
   </output>
+
+  <div id="gantt" style="height: 600px;"></div>
 
   <script>
     var globalJSON = null; // contains the JSON data obtained from reading CSV file
@@ -23,7 +23,6 @@
         reader.onload = function () {
           document.getElementById('out').innerHTML = reader.result;
           console.log(reader.result)
-          console.log(csvJSON(reader.result))
 
           globalJSON = csvJSON(reader.result)
 
@@ -48,41 +47,43 @@
 
       data.addColumn('string', 'Task ID');
       data.addColumn('string', 'Task Name');
+      data.addColumn('string', 'Resource');
       data.addColumn('date', 'Start Date');
       data.addColumn('date', 'End Date');
       data.addColumn('number', 'Duration');
       data.addColumn('number', 'Percent Complete');
       data.addColumn('string', 'Dependencies');
 
-      globalJSON.length = 7; // TODO: remove empty rows from CSV file. for now trim the length of the array
+      globalJSON.length = Object.keys(globalJSON).length - 1;
+      console.log(globalJSON.length)
 
       for (var i = 0; i < globalJSON.length; i++) {
         const formattedValues = Object.values(globalJSON[i]).map((value, i) => {
           let x = value;
 
-          // first two values must be strings
-          if (i === 0 || i === 1) {
+          // first three values must be strings
+          if (i === 0 || i === 1 || i ===2) {
             x = String(value)
           }
 
-          // third and fourth values must be dates
-          if (i === 2 || i === 3) {
+          // fourth and fifth values must be dates
+          if (i === 3 || i === 4) {
             x = new Date(value)
           }
 
-          // fifth values in their example are null https://developers.google.com/chart/interactive/docs/gallery/ganttchart
-          if (i === 4) {
+          // sixth values in their example are null https://developers.google.com/chart/interactive/docs/gallery/ganttchart
+          if (i === 5) {
             x = null;
           }
 
-          // sixth values in their examples are numbers
-          if (i === 5) {
+          // seventh values in their examples are numbers
+          if (i === 6) {
             x = Number(value)
           }
 
-          // seventh values in their examples are null
-          if (i === 6) {
-            x = null
+          // eighth values in their examples are null
+          if (i === 7) {
+            x = String(value).replace(/(\r\n|\n|\r)/gm, "")
           }
           return x;
         })
